@@ -4,7 +4,6 @@ import com.n11.userreviewservice.dto.request.create.CreateUserRequest;
 import com.n11.userreviewservice.dto.request.update.UpdateUserRequest;
 import com.n11.userreviewservice.dto.response.UserResponse;
 import com.n11.userreviewservice.exception.UserNotFoundException;
-import com.n11.userreviewservice.general.GeneralErrorMessage;
 import com.n11.userreviewservice.mapper.UserMapper;
 import com.n11.userreviewservice.model.User;
 import com.n11.userreviewservice.model.enums.Status;
