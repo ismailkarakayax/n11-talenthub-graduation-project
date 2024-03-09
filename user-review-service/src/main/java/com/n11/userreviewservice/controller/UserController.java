@@ -2,15 +2,17 @@ package com.n11.userreviewservice.controller;
 
 import com.n11.userreviewservice.dto.request.create.CreateUserRequest;
 import com.n11.userreviewservice.dto.request.update.UpdateUserRequest;
+import com.n11.userreviewservice.dto.response.RecommendationResponse;
 import com.n11.userreviewservice.dto.response.UserResponse;
 import com.n11.userreviewservice.general.RestResponse;
 import com.n11.userreviewservice.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -20,7 +22,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<RestResponse<UserResponse>> save(@RequestBody  CreateUserRequest request) {
+    public ResponseEntity<RestResponse<UserResponse>> save(@RequestBody @Valid CreateUserRequest request) {
         UserResponse response = userService.save(request);
         return new ResponseEntity<>(RestResponse.of(response), HttpStatus.CREATED);
     }
@@ -32,7 +34,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<RestResponse<UserResponse>> updateById(@PathVariable Long id, @RequestBody UpdateUserRequest request) {
+    public ResponseEntity<RestResponse<UserResponse>> updateById(@PathVariable Long id, @RequestBody @Valid UpdateUserRequest request) {
         UserResponse response = userService.update(id, request);
         return new ResponseEntity<>(RestResponse.of(response), HttpStatus.OK);
     }

@@ -2,8 +2,11 @@ package com.n11.userreviewservice.service;
 
 import com.n11.userreviewservice.dto.request.create.CreateUserRequest;
 import com.n11.userreviewservice.dto.request.update.UpdateUserRequest;
+import com.n11.userreviewservice.dto.response.RecommendationResponse;
 import com.n11.userreviewservice.dto.response.UserResponse;
 import com.n11.userreviewservice.model.User;
+
+import java.util.List;
 
 public interface UserService {
 
@@ -17,4 +20,5 @@ public interface UserService {
 
     UserResponse deActivate(Long id);
     User findEntityById(Long id);
+
 }
