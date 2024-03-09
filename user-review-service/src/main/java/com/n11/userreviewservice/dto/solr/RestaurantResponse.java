@@ -11,8 +11,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RestaurantResponse {
-
-    @JsonProperty("responseHeader")
-    private ResponseHeader responseHeader;
-    private Response response;
+    private String name;
+    private String location;
+    private double averageScore;
+    private String id;
+    @JsonProperty("_version_")
+    private long version;
 }
