@@ -1,7 +1,5 @@
 package com.n11.userreviewservice.service.impl;
 
-
-import com.n11.userreviewservice.dto.solr.RestaurantResponse;
 import com.n11.userreviewservice.mapper.RestaurantMapper;
 import com.n11.userreviewservice.service.RecommendationService;
 import lombok.RequiredArgsConstructor;
@@ -9,13 +7,10 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class RecommendationServiceImpl implements RecommendationService {
