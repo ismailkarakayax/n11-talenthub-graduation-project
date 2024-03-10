@@ -1,10 +1,14 @@
-package com.ismailkarakayax.restaurantservice.service;
+package com.ismailkarakayax.restaurantservice.service.imlp;
 
 import com.ismailkarakayax.restaurantservice.dto.RestaurantRequest;
 import com.ismailkarakayax.restaurantservice.dto.RestaurantResponse;
+import com.ismailkarakayax.restaurantservice.dto.UpdateAverageScore;
+import com.ismailkarakayax.restaurantservice.dto.UpdateRestaurantRequest;
+import com.ismailkarakayax.restaurantservice.exception.RestaurantNotFoundException;
 import com.ismailkarakayax.restaurantservice.mapper.RestaurantMapper;
 import com.ismailkarakayax.restaurantservice.model.Restaurant;
 import com.ismailkarakayax.restaurantservice.repository.RestaurantRepository;
+import com.ismailkarakayax.restaurantservice.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
+import static com.ismailkarakayax.restaurantservice.general.GeneralErrorMessage.RESTAURANT_NOT_FOUND;
+
 
 @Service
 @RequiredArgsConstructor
-public class RestaurantServiceImpl implements RestaurantService{
+public class RestaurantServiceImpl implements RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
     private final RestaurantMapper restaurantMapper;
@@ -34,7 +40,36 @@ public class RestaurantServiceImpl implements RestaurantService{
 
         return restaurantMapper.convertEntitiesToResponse(restaurants);
     }
+    @Override
+    public RestaurantResponse getById(String id){
+        Restaurant restaurant = restaurantRepository.findById(id)
+                .orElseThrow(()-> new RestaurantNotFoundException(RESTAURANT_NOT_FOUND));
 
+        return restaurantMapper.convertEntityToResponse(restaurant);
+    }
+    @Override
+    public RestaurantResponse updateRestaurantById(String id, UpdateRestaurantRequest request){
+        Restaurant restaurant = restaurantRepository.findById(id)
+                .orElseThrow(()-> new RestaurantNotFoundException(RESTAURANT_NOT_FOUND));
+
+        Restaurant newRestaurant = restaurantMapper.convertUpdateToEntity(restaurant,request);
+        restaurantRepository.save(newRestaurant);
+        return restaurantMapper.convertEntityToResponse(newRestaurant);
+    }
+    @Override
+    public RestaurantResponse updateAverageScore(String id, UpdateAverageScore averageScore){
+        Restaurant restaurant = restaurantRepository.findById(id)
+                .orElseThrow(()-> new RestaurantNotFoundException(RESTAURANT_NOT_FOUND));
+
+        restaurant.setAverageScore(averageScore.averageScore());
+        restaurantRepository.save(restaurant);
+        return restaurantMapper.convertEntityToResponse(restaurant);
+    }
+    @Override
+    public void deleteById(String id){
+        restaurantRepository.deleteById(id);
+    }
+    @Override
     public void createMockRestaurants() {
         List<Restaurant> mockRestaurants = new ArrayList<>();
 
