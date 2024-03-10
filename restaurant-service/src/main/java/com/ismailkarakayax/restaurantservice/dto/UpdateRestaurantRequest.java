@@ -2,7 +2,7 @@ package com.ismailkarakayax.restaurantservice.dto;
 
 import javax.validation.constraints.*;
 
-public record RestaurantRequest(
+public record UpdateRestaurantRequest(
         @NotBlank(message = "Name cannot be blank")
         @Size(max = 100, message = "Name cannot exceed 100 characters")
         String name,
@@ -16,6 +16,5 @@ public record RestaurantRequest(
         @DecimalMin(value = "-180", inclusive = true, message = "Longitude must be at least -180")
         @DecimalMax(value = "180", inclusive = true, message = "Longitude must be at most 180")
         Double longitude
-
 ) {
 }
