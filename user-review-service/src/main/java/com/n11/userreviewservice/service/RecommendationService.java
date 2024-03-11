@@ -1,11 +1,11 @@
 package com.n11.userreviewservice.service;
 
-import com.n11.userreviewservice.dto.solr.RestaurantResponse;
-import org.apache.solr.common.SolrDocumentList;
+import com.n11.userreviewservice.dto.response.RestaurantResponse;
 
 import java.util.List;
 
 public interface RecommendationService {
-    SolrDocumentList performSolrQuery();
+
+    List<RestaurantResponse> getRecommendationByUserId(Long id);
 
 }
