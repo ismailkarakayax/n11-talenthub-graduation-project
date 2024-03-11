@@ -8,9 +8,9 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ReviewRepository extends JpaRepository<Review,Long> {
-    List<Review> findByRestaurantId(String id);
 
-    @Query("SELECT AVG(r.score) FROM Review r WHERE r.restaurantId = :restaurantId")
-    Double findAverageRateByRestaurantId(@Param("restaurantId") String restaurantId);
+    @Query("SELECT SUM(r.score) FROM Review r WHERE r.restaurantId = :restaurantId")
+    Double findAllRateByRestaurantId(@Param("restaurantId") String restaurantId);
 
+    Long countByRestaurantId(String s);
 }

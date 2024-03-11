@@ -31,12 +31,12 @@ public class ReviewServiceImpl implements ReviewService {
     public ReviewResponse save(CreateReviewRequest request) {
         User entity = userService.findEntityById(request.userId());
         Review review = reviewMapper.convertCreateToReview(request, entity);
-        List<Review> restaurantReviews = reviewRepository.findByRestaurantId(request.restaurantId());
+        Long restaurantReviewCount = reviewRepository.countByRestaurantId(request.restaurantId());
 
 
-        if(!restaurantReviews.isEmpty()){
-            Double averageScore = reviewRepository.findAverageRateByRestaurantId(request.restaurantId());
-            UpdateAverageScore updateAverageScore=new UpdateAverageScore(averageScore+request.score());
+        if(restaurantReviewCount>0){
+            Double allScore = reviewRepository.findAllRateByRestaurantId(request.restaurantId());
+            UpdateAverageScore updateAverageScore=new UpdateAverageScore((allScore+request.score())/(restaurantReviewCount+1));
             restaurantClient.updateAverageScore(request.restaurantId(), updateAverageScore);
         }else{
             UpdateAverageScore updateAverageScore=new UpdateAverageScore(request.score());
