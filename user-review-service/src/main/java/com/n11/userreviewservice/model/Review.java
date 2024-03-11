@@ -1,8 +1,9 @@
 package com.n11.userreviewservice.model;
 
 import com.n11.userreviewservice.model.base.BaseEntity;
-import com.n11.userreviewservice.model.enums.Rate;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,15 +29,15 @@ public class Review extends BaseEntity {
 
     @Column(name = "restourant_id")
     @NotNull
-    private Long restaurantId;
+    private String restaurantId;
 
-    @Column(name="rate")
+    @Column(name = "rate")
     @NotNull
-    private Rate rate;
+    @Min(1)
+    @Max(5)
+    private int score;
 
     @Column(name = "comment",length = 150)
     private String comment;
-
-
 
 }
