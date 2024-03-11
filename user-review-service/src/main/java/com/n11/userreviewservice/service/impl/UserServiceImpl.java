@@ -8,7 +8,6 @@ import com.n11.userreviewservice.mapper.UserMapper;
 import com.n11.userreviewservice.model.User;
 import com.n11.userreviewservice.model.enums.Status;
 import com.n11.userreviewservice.repository.UserRepository;
-import com.n11.userreviewservice.service.AddressService;
 import com.n11.userreviewservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
