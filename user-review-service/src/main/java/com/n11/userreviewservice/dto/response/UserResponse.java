@@ -10,6 +10,8 @@ public record UserResponse(
         String surname,
         LocalDate birthDate,
         String email,
+        Double latitude,
+        Double longitude,
         Gender gender,
         Status status
 
