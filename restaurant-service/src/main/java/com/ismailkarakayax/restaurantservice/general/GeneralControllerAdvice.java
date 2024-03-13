@@ -21,7 +21,8 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class  GeneralControllerAdvice extends ResponseEntityExceptionHandler {
 
-
+    private final KafkaProducerService kafkaProducerService;
+    private static final String KAFKA_TOPIC = "errorLog";
 
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
@@ -32,7 +33,7 @@ public class  GeneralControllerAdvice extends ResponseEntityExceptionHandler {
         var generalErrorMessages = new GeneralErrorMessages(LocalDateTime.now(), message, description);
         var restResponse = RestResponse.error(generalErrorMessages);
 
-
+        kafkaProducerService.sendMessage(KAFKA_TOPIC,message);
 
         return new ResponseEntity<>(restResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -51,7 +52,7 @@ public class  GeneralControllerAdvice extends ResponseEntityExceptionHandler {
 
         var validationErrorMessages = new GeneralErrorMessages(LocalDateTime.now(), "Validation failed", errors.toString());
         var restResponse = RestResponse.error(validationErrorMessages);
-
+        kafkaProducerService.sendMessage(KAFKA_TOPIC,errors.toString());
 
 
         return new ResponseEntity<>(restResponse, HttpStatus.BAD_REQUEST);
@@ -65,7 +66,7 @@ public class  GeneralControllerAdvice extends ResponseEntityExceptionHandler {
 
         var generalErrorMessages = new GeneralErrorMessages(LocalDateTime.now(), message, description);
         var restResponse = RestResponse.error(generalErrorMessages);
-
+        kafkaProducerService.sendMessage(KAFKA_TOPIC,message);
 
         return new ResponseEntity<>(restResponse, HttpStatus.NOT_FOUND);
     }
