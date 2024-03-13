@@ -42,13 +42,16 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
 
         User updatedUser = userMapper.convertUptateToUser(user, request);
-
+        userRepository.save(updatedUser);
         return userMapper.convertToUserResponse(updatedUser);
     }
 
     @Override
     public void deleteById(Long id) {
-        userRepository.deleteById(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
+
+        userRepository.deleteById(user.getId());
     }
 
     @Override

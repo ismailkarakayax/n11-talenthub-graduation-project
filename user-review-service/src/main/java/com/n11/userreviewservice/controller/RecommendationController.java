@@ -21,7 +21,7 @@ public class RecommendationController {
 
     private final RecommendationService recommendationService;
 
-    @GetMapping("/with-userId/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<RestResponse<List<RestaurantResponse>>> getRecommendationsByUserID(@PathVariable Long id) {
         List<RestaurantResponse> queryResponse = recommendationService.getRecommendationByUserId(id);
         return new ResponseEntity<>(RestResponse.of(queryResponse), HttpStatus.OK);

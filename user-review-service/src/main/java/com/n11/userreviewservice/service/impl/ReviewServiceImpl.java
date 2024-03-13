@@ -14,8 +14,7 @@ import com.n11.userreviewservice.service.ReviewService;
 import com.n11.userreviewservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.n11.userreviewservice.general.GeneralErrorMessage.REVIEW_NOT_FOUND;
 
@@ -28,23 +27,12 @@ public class ReviewServiceImpl implements ReviewService {
     private final RestaurantClient restaurantClient;
 
     @Override
+    @Transactional
     public ReviewResponse save(CreateReviewRequest request) {
         User entity = userService.findEntityById(request.userId());
         Review review = reviewMapper.convertCreateToReview(request, entity);
-        Long restaurantReviewCount = reviewRepository.countByRestaurantId(request.restaurantId());
-
-
-        if(restaurantReviewCount>0){
-            Double allScore = reviewRepository.findAllRateByRestaurantId(request.restaurantId());
-            UpdateAverageScore updateAverageScore=new UpdateAverageScore((allScore+request.score())/(restaurantReviewCount+1));
-            restaurantClient.updateAverageScore(request.restaurantId(), updateAverageScore);
-        }else{
-            UpdateAverageScore updateAverageScore=new UpdateAverageScore(request.score());
-            restaurantClient.updateAverageScore(request.restaurantId(),updateAverageScore);
-        }
-
-
         reviewRepository.save(review);
+        updateAverageScore(review.getRestaurantId());
         return reviewMapper.convertToResponse(review);
     }
 
@@ -52,7 +40,6 @@ public class ReviewServiceImpl implements ReviewService {
     public ReviewResponse findById(Long id) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException(REVIEW_NOT_FOUND));
-
         return reviewMapper.convertToResponse(review);
     }
 
@@ -61,11 +48,29 @@ public class ReviewServiceImpl implements ReviewService {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException(REVIEW_NOT_FOUND));
         review = reviewMapper.convertUpdateToReview(review, request);
-        return reviewMapper.convertToResponse(review);
-    }
+        reviewRepository.save(review);
+        updateAverageScore(review.getRestaurantId());
+        return reviewMapper.convertToResponse(review);}
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(() -> new ReviewNotFoundException(REVIEW_NOT_FOUND));
         reviewRepository.deleteById(id);
+        updateAverageScore(review.getRestaurantId());
+    }
+
+    public void updateAverageScore(String restaurantId) {
+        int restaurantReviewCount = reviewRepository.countByRestaurantId(restaurantId);
+
+        if (restaurantReviewCount > 0) {
+            Double allScore = reviewRepository.findAllRateByRestaurantId(restaurantId);
+            UpdateAverageScore updateAverageScore = new UpdateAverageScore(allScore / restaurantReviewCount);
+            restaurantClient.updateAverageScore(restaurantId, updateAverageScore);
+        } else {
+            UpdateAverageScore updateAverageScore = new UpdateAverageScore(0);
+            restaurantClient.updateAverageScore(restaurantId, updateAverageScore);
+        }
     }
 }

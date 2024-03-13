@@ -53,9 +53,8 @@ public class User extends BaseEntity {
     @NotNull
     private Status status;
 
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<Review> reviewList;
-
 
 
 }

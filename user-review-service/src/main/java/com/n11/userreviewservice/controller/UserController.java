@@ -5,6 +5,9 @@ import com.n11.userreviewservice.dto.request.update.UpdateUserRequest;
 import com.n11.userreviewservice.dto.response.UserResponse;
 import com.n11.userreviewservice.general.RestResponse;
 import com.n11.userreviewservice.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,13 +33,13 @@ public class UserController {
         return new ResponseEntity<>(RestResponse.of(response), HttpStatus.OK);
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<RestResponse<UserResponse>> updateById(@PathVariable Long id, @RequestBody @Valid UpdateUserRequest request) {
         UserResponse response = userService.update(id, request);
         return new ResponseEntity<>(RestResponse.of(response), HttpStatus.OK);
     }
 
-    @PatchMapping("/{id}/activate")
+    @PatchMapping("/{id}/deActivate")
     public ResponseEntity<RestResponse<UserResponse>> deActivateById(@PathVariable Long id) {
         UserResponse response = userService.deActivate(id);
         return new ResponseEntity<>(RestResponse.of(response), HttpStatus.OK);
