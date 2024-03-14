@@ -18,7 +18,6 @@ public class BaseControllerTest {
 
         RestResponse restResponse = objectMapper.readValue(content, RestResponse.class);
 
-        boolean success = restResponse.isSuccess();
-        return success;
+        return restResponse.isSuccess();
     }
 }

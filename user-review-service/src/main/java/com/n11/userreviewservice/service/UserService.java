@@ -5,7 +5,11 @@ import com.n11.userreviewservice.dto.request.update.UpdateUserRequest;
 import com.n11.userreviewservice.dto.response.UserResponse;
 import com.n11.userreviewservice.model.User;
 
+import java.util.List;
+
 public interface UserService {
+
+    List<UserResponse> getAll();
 
     UserResponse save(CreateUserRequest request);
 
@@ -17,5 +21,6 @@ public interface UserService {
 
     UserResponse deActivate(Long id);
     User findEntityById(Long id);
+
 
 }

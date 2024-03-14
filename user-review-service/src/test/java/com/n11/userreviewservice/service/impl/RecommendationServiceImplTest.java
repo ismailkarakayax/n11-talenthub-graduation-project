@@ -36,7 +36,7 @@ class RecommendationServiceImplTest {
     void getRecommendationByUserId_shouldReturnRecommendations_whenUserExists() {
         // Arrange
         Long userId = 1L;
-        UserResponse userResponse = new UserResponse("John", "Doe", LocalDate.now(), "john.doe@example.com", 40.0, -75.0, Gender.MALE, Status.ACTIVE);
+        UserResponse userResponse = new UserResponse(1L,"John", "Doe", LocalDate.now(), "john.doe@example.com", 40.0, -75.0, Gender.MALE, Status.ACTIVE);
         List<RestaurantResponse> mockRestaurantResponses = createMockRestaurantResponses();
 
         when(userService.findById(userId)).thenReturn(userResponse);

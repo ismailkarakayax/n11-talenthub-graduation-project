@@ -12,6 +12,8 @@ import com.n11.userreviewservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import static com.n11.userreviewservice.general.GeneralErrorMessage.USER_NOT_FOUND;
 
 @Service
@@ -20,6 +22,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+
+    @Override
+    public List<UserResponse> getAll() {
+        List<User> users= userRepository.findAll();
+        return userMapper.convertToUserResponseList(users);
+    }
 
     @Override
     public UserResponse save(CreateUserRequest request) {

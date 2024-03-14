@@ -15,6 +15,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,12 +35,41 @@ class UserServiceImplTest {
 
     @InjectMocks
     private UserServiceImpl userService;
+
+    @Test
+    void getAll() {
+        //given
+        List<User> userList = Arrays.asList(
+                new User(),
+                new User()
+        );
+        List<UserResponse> responses= new ArrayList<>();
+
+        UserResponse expectedResponse1 = new UserResponse(1L,"John", "Doe", LocalDate.of(2001, 3, 15), "john.doe@example.com", 40.0, -75.0, Gender.MALE, Status.ACTIVE);
+        UserResponse expectedResponse2 = new UserResponse(2L,"Jane", "Doe", LocalDate.of(2002, 5, 20), "jane.doe@example.com", 41.0, -76.0, Gender.FEMALE, Status.ACTIVE);
+        responses.add(expectedResponse1);
+        responses.add(expectedResponse2);
+        //when
+
+        when(userRepository.findAll()).thenReturn(userList);
+        when(userMapper.convertToUserResponseList(userList)).thenReturn(responses);
+
+        List<UserResponse> result = userService.getAll();
+
+        //then
+        assertNotNull(result);
+        assertEquals(2, result.size());
+
+        verify(userRepository, times(1)).findAll();
+        verify(userMapper, times(1)).convertToUserResponseList(userList);
+    }
+
     @Test
     void shouldSave() {
         //given
-        CreateUserRequest createRequest = new CreateUserRequest("John", "Doe", LocalDate.now(), "john.doe@example.com", 40.0, -75.0, Gender.MALE);
+        CreateUserRequest createRequest = new CreateUserRequest("John", "Doe", LocalDate.of(2001, 3, 15), "john.doe@example.com", 40.0, -75.0, Gender.MALE);
         User user = new User(); // create a user instance as per your implementation
-        UserResponse expectedResponse = new UserResponse("John", "Doe", LocalDate.now(), "john.doe@example.com", 40.0, -75.0, Gender.MALE, Status.ACTIVE);
+        UserResponse expectedResponse = new UserResponse(1L,"John", "Doe", LocalDate.of(2001, 3, 15), "john.doe@example.com", 40.0, -75.0, Gender.MALE, Status.ACTIVE);
 
         //when
         when(userMapper.convertCreateToUser(any(CreateUserRequest.class))).thenReturn(user);
@@ -51,15 +83,15 @@ class UserServiceImplTest {
         assertNotNull(result);
         assertEquals(expectedResponse, result);
         verify(userRepository, times(1)).save(any(User.class));
-
     }
+
 
     @Test
     void findById() {
         //given
         Long userId = 1L;
         User user = new User(); // create a user instance as per your implementation
-        UserResponse expectedResponse = new UserResponse("John", "Doe", LocalDate.now(), "john.doe@example.com", 40.0, -75.0, Gender.MALE, Status.ACTIVE);
+        UserResponse expectedResponse = new UserResponse(1L,"John", "Doe", LocalDate.now(), "john.doe@example.com", 40.0, -75.0, Gender.MALE, Status.ACTIVE);
 
         //when
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
@@ -74,34 +106,36 @@ class UserServiceImplTest {
     }
 
     @Test
-    void update() {
+    void updateById() {
         // Arrange
         Long userId = 1L;
-        UpdateUserRequest updateRequest = new UpdateUserRequest("UpdatedJohn", "UpdatedDoe", LocalDate.now(), "updated.john.doe@example.com", 42.0, -78.0, Gender.MALE);
+        UpdateUserRequest updateRequest = new UpdateUserRequest("UpdatedJohn", "UpdatedDoe", LocalDate.of(2001, 3, 15), "updated.john.doe@example.com", 42.0, -78.0, Gender.MALE);
+
         // Existing user with initial values
         User user = new User();
         user.setId(userId);
         user.setName("John");
         user.setSurname("Doe");
-        user.setBirthDate(LocalDate.now());
+        user.setBirthDate(LocalDate.of(2001, 3, 15));
         user.setEmail("john.doe@example.com");
         user.setLatitude(40.0);
         user.setLongitude(-75.0);
         user.setGender(Gender.MALE);
         user.setStatus(Status.ACTIVE);
 
-// Updated user with new values
+        // Updated user with new values
         User updatedUser = new User();
         updatedUser.setId(userId);
         updatedUser.setName("UpdatedJohn");
         updatedUser.setSurname("UpdatedDoe");
-        updatedUser.setBirthDate(LocalDate.now());
+        updatedUser.setBirthDate(LocalDate.of(2001, 3, 15));
         updatedUser.setEmail("updated.john.doe@example.com");
         updatedUser.setLatitude(42.0);
         updatedUser.setLongitude(-78.0);
         updatedUser.setGender(Gender.MALE);
         updatedUser.setStatus(Status.ACTIVE);
-        UserResponse expectedResponse = new UserResponse("UpdatedJohn", "UpdatedDoe", LocalDate.now(), "updated.john.doe@example.com", 42.0, -78.0, Gender.MALE, Status.ACTIVE);
+
+        UserResponse expectedResponse = new UserResponse(1L,"UpdatedJohn", "UpdatedDoe", LocalDate.of(2001, 3, 15), "updated.john.doe@example.com", 42.0, -78.0, Gender.MALE, Status.ACTIVE);
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(userMapper.convertUptateToUser(user, updateRequest)).thenReturn(updatedUser);
@@ -112,7 +146,7 @@ class UserServiceImplTest {
         UserResponse result = userService.update(userId, updateRequest);
 
         // Assert
-        assertNotNull(user);
+        assertNotNull(result);
         assertEquals(expectedResponse, result);
         verify(userRepository, times(1)).findById(userId);
         verify(userRepository, times(1)).save(updatedUser);

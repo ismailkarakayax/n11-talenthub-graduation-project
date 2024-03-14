@@ -41,6 +41,17 @@ class UserControllerTest extends BaseControllerTest{
     }
 
     @Test
+    void getAll() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+
+        boolean success = isSuccess(mvcResult);
+        assertTrue(success);
+    }
+
+    @Test
     void shouldSaveUser() throws Exception{
         CreateUserRequest request = new CreateUserRequest("John", "Doe", LocalDate.of(2001,3,15), "john.doe@example.com", 41.0666395182724, 28.88753330324236, Gender.MALE);
 

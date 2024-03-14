@@ -9,6 +9,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
+import java.util.List;
+
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface UserMapper {
 
@@ -18,4 +20,6 @@ public interface UserMapper {
     User convertUptateToUser(@MappingTarget User oldUser, UpdateUserRequest request);
 
     UserResponse convertToUserResponse(User user);
+
+    List<UserResponse> convertToUserResponseList(List<User> users);
 }

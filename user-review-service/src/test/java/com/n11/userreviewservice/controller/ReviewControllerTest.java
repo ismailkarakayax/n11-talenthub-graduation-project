@@ -40,6 +40,30 @@ class ReviewControllerTest extends BaseControllerTest{
     }
 
     @Test
+    void findAll() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/reviews")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+
+        boolean success = isSuccess(mvcResult);
+        assertTrue(success);
+    }
+
+    @Test
+    void findAllByRestaurantId() throws Exception {
+        String restaurantId = "92bc0c53-c4b1-47eb-9f55-9c1516457bdb";
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/reviews/restaurantId/" + restaurantId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+
+        boolean success = isSuccess(mvcResult);
+        assertTrue(success);
+    }
+
+    @Test
     void shouldSaveReview() throws Exception {
         CreateReviewRequest request = new CreateReviewRequest(4L, "92bc0c53-c4b1-47eb-9f55-9c1516457bdb",5,"güzel");
 

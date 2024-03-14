@@ -10,6 +10,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
+import java.util.List;
+
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface ReviewMapper {
 
@@ -21,4 +23,6 @@ public interface ReviewMapper {
 
     @Mapping(target = "userId",source = "review.user.id")
     ReviewResponse convertToResponse(Review review);
+
+    List<ReviewResponse> convertToResponseList(List<Review> reviews);
 }

@@ -6,6 +6,7 @@ import com.n11.userreviewservice.model.enums.Status;
 import java.time.LocalDate;
 
 public record UserResponse(
+        Long id,
         String name,
         String surname,
         LocalDate birthDate,

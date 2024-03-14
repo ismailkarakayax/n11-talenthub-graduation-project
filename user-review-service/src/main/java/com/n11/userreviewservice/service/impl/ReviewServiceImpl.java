@@ -16,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static com.n11.userreviewservice.general.GeneralErrorMessage.REVIEW_NOT_FOUND;
 
 @Service
@@ -25,6 +27,19 @@ public class ReviewServiceImpl implements ReviewService {
     private final UserService userService;
     private final ReviewMapper reviewMapper;
     private final RestaurantClient restaurantClient;
+
+    @Override
+    public List<ReviewResponse> findAll() {
+        List<Review> reviews = reviewRepository.findAll();
+
+        return reviewMapper.convertToResponseList(reviews);
+    }
+
+    @Override
+    public List<ReviewResponse> findAllByRestaurantId(String id) {
+        List<Review> reviews = reviewRepository.findAllByRestaurantId(id);
+        return reviewMapper.convertToResponseList(reviews);
+    }
 
     @Override
     @Transactional
