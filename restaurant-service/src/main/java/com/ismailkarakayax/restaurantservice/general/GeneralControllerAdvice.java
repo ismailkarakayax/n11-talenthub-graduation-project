@@ -4,25 +4,23 @@ package com.ismailkarakayax.restaurantservice.general;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 
-@ControllerAdvice
+@RestControllerAdvice
 @RequiredArgsConstructor
-public class  GeneralControllerAdvice extends ResponseEntityExceptionHandler {
+public class  GeneralControllerAdvice  {
 
     private final KafkaProducerService kafkaProducerService;
-    private static final String KAFKA_TOPIC = "errorLog";
+    private static final String KAFKA_TOPIC = "restaurantErrorLog";
 
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
@@ -38,22 +36,19 @@ public class  GeneralControllerAdvice extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(restResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    public final ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex) {
-        // Handle validation errors during persistence time
-        Map<String, String> errors = new HashMap<>();
-        Set<ConstraintViolation<?>> violations = ex.getConstraintViolations();
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Object> handleValidationErrors(MethodArgumentNotValidException ex) {
+        List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
+        List<String> errors = new ArrayList<>();
 
-        for (ConstraintViolation<?> violation : violations) {
-            String fieldName = violation.getPropertyPath().toString();
-            String errorMessage = violation.getMessage();
-            errors.put(fieldName, errorMessage);
+        for (FieldError fieldError : fieldErrors) {
+            String errorMessage = fieldError.getDefaultMessage();
+            errors.add(errorMessage);
         }
 
-        var validationErrorMessages = new GeneralErrorMessages(LocalDateTime.now(), "Validation failed", errors.toString());
-        var restResponse = RestResponse.error(validationErrorMessages);
-        kafkaProducerService.sendMessage(KAFKA_TOPIC,errors.toString());
-
+        var errorMessages = new GeneralErrorMessages(LocalDateTime.now(), "Validation failed", errors.toString());
+        var restResponse = RestResponse.error(errorMessages);
+        kafkaProducerService.sendMessage(KAFKA_TOPIC, errors.toString());
 
         return new ResponseEntity<>(restResponse, HttpStatus.BAD_REQUEST);
     }

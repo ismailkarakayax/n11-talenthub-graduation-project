@@ -65,11 +65,10 @@ public class UserController {
                                             }"""
                             )
                     }
-
             )
     )
     @PostMapping
-    public ResponseEntity<RestResponse<UserResponse>> save(@RequestBody CreateUserRequest request) {
+    public ResponseEntity<RestResponse<UserResponse>> save( @RequestBody @Valid CreateUserRequest request) {
         UserResponse response = userService.save(request);
         return new ResponseEntity<>(RestResponse.of(response), HttpStatus.CREATED);
     }
@@ -113,11 +112,10 @@ public class UserController {
                                             }"""
                             )
                     }
-
             )
     )
     @PutMapping("/{id}")
-    public ResponseEntity<RestResponse<UserResponse>> updateById(@PathVariable Long id, @RequestBody @Valid UpdateUserRequest request) {
+    public ResponseEntity<RestResponse<UserResponse>> updateById(@PathVariable Long id,  @RequestBody @Valid UpdateUserRequest request) {
         UserResponse response = userService.update(id, request);
         return new ResponseEntity<>(RestResponse.of(response), HttpStatus.OK);
     }

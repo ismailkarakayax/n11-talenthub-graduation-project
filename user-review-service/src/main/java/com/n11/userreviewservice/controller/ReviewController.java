@@ -75,7 +75,7 @@ public class ReviewController {
             )
     )
     @PostMapping
-    public ResponseEntity<RestResponse<ReviewResponse>> save(@RequestBody @Valid CreateReviewRequest request) {
+    public ResponseEntity<RestResponse<ReviewResponse>> save( @RequestBody @Valid CreateReviewRequest request) {
         ReviewResponse response = reviewService.save(request);
         return new ResponseEntity<>(RestResponse.of(response), HttpStatus.CREATED);
     }
@@ -115,7 +115,7 @@ public class ReviewController {
                     }
             )
     )
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<RestResponse<ReviewResponse>> updateById(@PathVariable Long id, @RequestBody @Valid UpdateReviewRequest request) {
         ReviewResponse response = reviewService.update(id, request);
         return new ResponseEntity<>(RestResponse.of(response), HttpStatus.OK);

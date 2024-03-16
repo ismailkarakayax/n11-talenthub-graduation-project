@@ -50,8 +50,8 @@ class ReviewServiceImplTest {
                 new Review()
         );
         List<ReviewResponse> expectedResponses = Arrays.asList(
-                new ReviewResponse(1L,1L, "restaurant123", 4, "Good food"),
-                new ReviewResponse(2L,2L, "restaurant456", 5, "Excellent service")
+                new ReviewResponse(1L,1L,"a", "restaurant123", 4, "Good food"),
+                new ReviewResponse(2L,2L,"a", "restaurant456", 5, "Excellent service")
         );
 
         when(reviewRepository.findAll()).thenReturn(reviews);
@@ -76,8 +76,8 @@ class ReviewServiceImplTest {
                 new Review()
         );
         List<ReviewResponse> expectedResponses = Arrays.asList(
-                new ReviewResponse(1L,1L, restaurantId, 4, "Good food"),
-                new ReviewResponse(2L,2L, restaurantId, 5, "Excellent service")
+                new ReviewResponse(1L,1L,"a", "restaurant123", 4, "Good food"),
+                new ReviewResponse(2L,2L,"a", "restaurant456", 5, "Excellent service")
         );
 
         when(reviewRepository.findAllByRestaurantId(restaurantId)).thenReturn(reviews);
@@ -100,7 +100,7 @@ class ReviewServiceImplTest {
         CreateReviewRequest createRequest = new CreateReviewRequest(1L, "restaurant123", 4, "Good food");
         User user=new User();
         Review createdReview = new Review(); // create a review instance as per your implementation
-        ReviewResponse expectedResponse = new ReviewResponse(1L,1L, "restaurant123", 4, "Good food");
+        ReviewResponse expectedResponse = new ReviewResponse(1L,1L,"a", "restaurant123", 4, "Good food");
         UpdateAverageScore averageScore=new UpdateAverageScore(4);
 
         when(userService.findEntityById(createRequest.userId())).thenReturn(user); // replace with your actual User instance
@@ -123,7 +123,7 @@ class ReviewServiceImplTest {
         // Arrange
         Long reviewId = 1L;
         Review existingReview = new Review(); // create a review instance as per your implementation
-        ReviewResponse expectedResponse = new ReviewResponse(1L,1L, "restaurant123", 4, "Good food");
+        ReviewResponse expectedResponse = new ReviewResponse(1L,1L,"a", "restaurant123", 4, "Good food");
 
         when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(existingReview));
         when(reviewMapper.convertToResponse(any(Review.class))).thenReturn(expectedResponse);
@@ -144,7 +144,7 @@ class ReviewServiceImplTest {
         UpdateReviewRequest updateRequest = new UpdateReviewRequest(5, "Excellent service");
         Review existingReview = new Review(); // create a review instance as per your implementation
         Review updatedReview = new Review(); // create an updated review instance as per your implementation
-        ReviewResponse expectedResponse = new ReviewResponse(1L,1L, "restaurant123", 5, "Excellent service");
+        ReviewResponse expectedResponse = new ReviewResponse(1L,1L, "a","restaurant123", 5, "Excellent service");
 
         when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(existingReview));
         when(reviewMapper.convertUpdateToReview(existingReview, updateRequest)).thenReturn(updatedReview);

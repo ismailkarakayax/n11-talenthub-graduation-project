@@ -74,15 +74,15 @@ public class RestaurantServiceImpl implements RestaurantService {
         List<Restaurant> mockRestaurants = new ArrayList<>();
 
         // Burada mock restoran verilerini oluşturun
-        Restaurant r1 = new Restaurant(null, "Mock Restaurant 1", "41.0647143168002,28.863865490794897", 4.5);
-        Restaurant r2 = new Restaurant(null, "Mock Restaurant 2", "41.06566883548766,28.875710125384835", 4.2);
-        Restaurant r3 = new Restaurant(null, "Mock Restaurant 3", "41.06663951827246,28.88753330324236", 4.8);
-        Restaurant r4 = new Restaurant(null, "Mock Restaurant 4", "41.06756165359459,28.899420853794673", 4.5);
-        Restaurant r5 = new Restaurant(null, "Mock Restaurant 5", "41.068467598545695,28.91128694646584", 4.2);
-        Restaurant r6 = new Restaurant(null, "Mock Restaurant 6", "41.06945441723467,28.92313158141844", 4.8);
-        Restaurant r7 = new Restaurant(null, "Mock Restaurant 7", "41.07037651309991,28.934997673987777", 4.5);
-        Restaurant r8 = new Restaurant(null, "Mock Restaurant 8", "41.071363303133836,28.946842308956448", 4.2);
-        Restaurant r9 = new Restaurant(null, "Mock Restaurant 9", "41.07226919569014,28.95872985928008", 4.8);
+        Restaurant r1 = new Restaurant(null, "Mock Restaurant 1", "41.0647143168002,28.863865490794897", 0);
+        Restaurant r2 = new Restaurant(null, "Mock Restaurant 2", "41.06566883548766,28.875710125384835", 0);
+        Restaurant r3 = new Restaurant(null, "Mock Restaurant 3", "41.06663951827246,28.88753330324236", 0);
+        Restaurant r4 = new Restaurant(null, "Mock Restaurant 4", "41.06756165359459,28.899420853794673", 0);
+        Restaurant r5 = new Restaurant(null, "Mock Restaurant 5", "41.068467598545695,28.91128694646584", 0);
+        Restaurant r6 = new Restaurant(null, "Mock Restaurant 6", "41.06945441723467,28.92313158141844", 0);
+        Restaurant r7 = new Restaurant(null, "Mock Restaurant 7", "41.07037651309991,28.934997673987777", 0);
+        Restaurant r8 = new Restaurant(null, "Mock Restaurant 8", "41.071363303133836,28.946842308956448", 0);
+        Restaurant r9 = new Restaurant(null, "Mock Restaurant 9", "41.07226919569014,28.95872985928008", 0);
         mockRestaurants.add(r1);
         mockRestaurants.add(r2);
         mockRestaurants.add(r3);

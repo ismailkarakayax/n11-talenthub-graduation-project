@@ -92,7 +92,7 @@ class ReviewControllerTest extends BaseControllerTest{
     void updateById() throws Exception {
         UpdateReviewRequest request=new UpdateReviewRequest(3,"orta");
 
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/reviews/8")
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/reviews/8")
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())

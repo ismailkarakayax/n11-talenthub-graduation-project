@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 
 @RestController
 @RequestMapping("/api/v1/restaurants")
@@ -20,7 +22,7 @@ public class RestaurantController {
     private final RestaurantService restaurantService;
 
     @PostMapping
-    public ResponseEntity<RestResponse<RestaurantResponse>> save(@RequestBody RestaurantRequest request) {
+    public ResponseEntity<RestResponse<RestaurantResponse>> save(@RequestBody @Valid RestaurantRequest request) {
         RestaurantResponse response = restaurantService.save(request);
         return new ResponseEntity<>(RestResponse.of(response), HttpStatus.CREATED);
     }
@@ -38,13 +40,13 @@ public class RestaurantController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RestResponse<RestaurantResponse>> updateById(@PathVariable String id, @RequestBody UpdateRestaurantRequest request){
+    public ResponseEntity<RestResponse<RestaurantResponse>> updateById(@PathVariable String id, @RequestBody @Valid UpdateRestaurantRequest request){
         RestaurantResponse response = restaurantService.updateRestaurantById(id,request);
         return new ResponseEntity<>(RestResponse.of(response), HttpStatus.OK);
     }
 
     @PutMapping("/average-score/{id}")
-    public ResponseEntity<RestResponse<RestaurantResponse>> updateAverageScore(@PathVariable String id, @RequestBody UpdateAverageScore request){
+    public ResponseEntity<RestResponse<RestaurantResponse>> updateAverageScore(@PathVariable String id, @RequestBody @Valid UpdateAverageScore request){
         RestaurantResponse response = restaurantService.updateAverageScore(id,request);
         return new ResponseEntity<>(RestResponse.of(response), HttpStatus.OK);
     }

@@ -19,6 +19,8 @@ public interface RestaurantMapper {
     @Mapping(target = "location", expression = "java(request.latitude() + \",\" + request.longitude())")
     Restaurant convertUpdateToEntity(@MappingTarget Restaurant restaurant, UpdateRestaurantRequest request);
 
+    @Mapping(target = "latitude", expression = "java(Double.parseDouble(restaurant.getLocation().split(\",\")[0].trim()))")
+    @Mapping(target = "longitude", expression = "java(Double.parseDouble(restaurant.getLocation().split(\",\")[1].trim()))")
     RestaurantResponse convertEntityToResponse(Restaurant restaurant);
 
     List<RestaurantResponse> convertEntitiesToResponse(List<Restaurant> restaurant);

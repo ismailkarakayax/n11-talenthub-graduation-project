@@ -22,6 +22,7 @@ public interface ReviewMapper {
     Review convertUpdateToReview(@MappingTarget Review oldReview, UpdateReviewRequest request);
 
     @Mapping(target = "userId",source = "review.user.id")
+    @Mapping(target= "userFullName", expression = "java(review.getUser().getName()+\" \"+review.getUser().getSurname())")
     ReviewResponse convertToResponse(Review review);
 
     List<ReviewResponse> convertToResponseList(List<Review> reviews);

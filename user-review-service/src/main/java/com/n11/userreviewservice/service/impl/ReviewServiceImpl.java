@@ -65,7 +65,8 @@ public class ReviewServiceImpl implements ReviewService {
         review = reviewMapper.convertUpdateToReview(review, request);
         reviewRepository.save(review);
         updateAverageScore(review.getRestaurantId());
-        return reviewMapper.convertToResponse(review);}
+        return reviewMapper.convertToResponse(review);
+    }
 
     @Override
     @Transactional

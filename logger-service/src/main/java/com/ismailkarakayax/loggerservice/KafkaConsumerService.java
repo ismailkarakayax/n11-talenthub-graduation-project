@@ -14,15 +14,30 @@ public class KafkaConsumerService {
 
     private final ErrorLogRepository errorLogRepository;
 
-    @KafkaListener(topics = "errorLog", groupId = "log-consumer-group")
-    public void consumes(String message){
+    @KafkaListener(topics = "userReviewErrorLog", groupId = "log-consumer-group")
+    public void consumesUserReviewService(String message){
 
         log.info("consume start!");
 
         ErrorLog errorLog = new ErrorLog();
         errorLog.setDate(LocalDateTime.now());
         errorLog.setMessage(message);
-        errorLog.setDescription("Kafka logs");
+        errorLog.setDescription("User Review Service Error Logs");
+
+        errorLogRepository.save(errorLog);
+
+        log.info("consume finished!");
+    }
+
+    @KafkaListener(topics = "restaurantErrorLog", groupId = "log-consumer-group")
+    public void consumesRestaurant(String message){
+
+        log.info("consume start!");
+
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setDate(LocalDateTime.now());
+        errorLog.setMessage(message);
+        errorLog.setDescription("Restaurant Service Error Logs");
 
         errorLogRepository.save(errorLog);
 
