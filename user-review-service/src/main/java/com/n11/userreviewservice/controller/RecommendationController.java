@@ -4,6 +4,7 @@ package com.n11.userreviewservice.controller;
 import com.n11.userreviewservice.dto.response.RestaurantResponse;
 import com.n11.userreviewservice.general.RestResponse;
 import com.n11.userreviewservice.service.RecommendationService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/recommendations")
 @RequiredArgsConstructor
+@Tag(name = "Recommendation Controller", description = "Recommendation Management")
 public class RecommendationController {
 
     private final RecommendationService recommendationService;
