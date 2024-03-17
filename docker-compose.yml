@@ -94,6 +94,26 @@ services:
       - "8761:8761"
 
 
+  logger-service:
+    image: n11-bootcamp-grduation-project/logger-service
+    build:
+      context: ./logger-service
+      dockerfile: Dockerfile
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
+      - SERVER_PORT=8083
+      - SPRING_APPLICATION_NAME=logger-service
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-logger:5431/logger-service
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
+      - SPRING_KAFKA_CONSUMER_BOOTSTRAPSERVERS=kafka:9092
+    depends_on:
+      - discovery-server
+      - kafka
+      - zookeeper
+    ports:
+      - "8083:8083"
+
+
   restaurant-service:
     image: n11-bootcamp-grduation-project/restaurant-service
     build:
@@ -105,7 +125,7 @@ services:
       - SPRING_APPLICATION_NAME=restaurant-service
       - SPRING_DATA_SOLR_HOST=http://solr:8983/solr
       - SPRING_ZIPKIN_BASE-URL=http://zipkin:9411
-      - SPRING_KAFKA_PRODUCER_BOOTSTRAPSERVERS=kafka:29092
+      - SPRING_KAFKA_PRODUCER_BOOTSTRAPSERVERS=kafka:9092
     depends_on:
       - discovery-server
     ports:
@@ -122,7 +142,7 @@ services:
       - SERVER_PORT=8081
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-user-review:5433/user-review-service
       - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
-      - SPRING_KAFKA_PRODUCER_BOOTSTRAPSERVERS=kafka:29092
+      - SPRING_KAFKA_PRODUCER_BOOTSTRAPSERVERS=kafka:9092
     depends_on:
       - discovery-server
     ports:
