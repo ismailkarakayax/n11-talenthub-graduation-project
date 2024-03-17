@@ -1,0 +1,133 @@
+version: '3'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.4
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 22181:2181
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.4
+    depends_on:
+      - zookeeper
+    ports:
+      - 29092:29092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  solr:
+    image: solr:8.11.2
+    build: .
+    container_name: solr
+    ports:
+      - "8983:8983"
+    volumes:
+      - ./data:/var/solr/data
+
+
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+
+  postgres-logger:
+    container_name: postgres-logger
+    image: postgres
+    environment:
+      POSTGRES_DB: logger-service
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    expose:
+      - "5431"
+    ports:
+      - "5431:5431"
+    command: -p 5431
+    restart: always
+
+  postgres-user-review:
+    container_name: postgres-user-review
+    image: postgres
+    environment:
+      POSTGRES_DB: user-review-service
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    expose:
+      - "5433"
+    ports:
+      - "5433:5433"
+    command: -p 5433
+    restart: always
+
+
+  api-gateway:
+    image: n11-bootcamp-grduation-project/api-gateway
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    environment:
+      - SERVER_PORT=8080
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
+      - SPRING_APPLICATION_NAME=api-gateway
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
+    depends_on:
+      - discovery-server
+    ports:
+      - "8080:8080"
+
+  discovery-server:
+    image: n11-bootcamp-grduation-project/discovery-server
+    build:
+      context: ./discovery-server
+      dockerfile: Dockerfile
+    environment:
+      - SERVER_PORT=8761
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
+    ports:
+      - "8761:8761"
+
+
+  restaurant-service:
+    image: n11-bootcamp-grduation-project/restaurant-service
+    build:
+      context: ./restaurant-service
+      dockerfile: Dockerfile
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
+      - SERVER_PORT=8082
+      - SPRING_APPLICATION_NAME=restaurant-service
+      - SPRING_DATA_SOLR_HOST=http://solr:8983/solr
+      - SPRING_ZIPKIN_BASE-URL=http://zipkin:9411
+      - SPRING_KAFKA_PRODUCER_BOOTSTRAPSERVERS=kafka:29092
+    depends_on:
+      - discovery-server
+    ports:
+      - "8082:8082"
+
+  user-review-service:
+    image: n11-bootcamp-grduation-project/user-review-service
+    build:
+      context: ./user-review-service
+      dockerfile: Dockerfile
+    environment:
+      - SOLR_URL=http://solr:8983/solr/restaurants
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
+      - SERVER_PORT=8081
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-user-review:5433/user-review-service
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
+      - SPRING_KAFKA_PRODUCER_BOOTSTRAPSERVERS=kafka:29092
+    depends_on:
+      - discovery-server
+    ports:
+      - "8081:8081"
+
+
+
+

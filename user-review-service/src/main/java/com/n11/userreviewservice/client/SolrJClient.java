@@ -7,6 +7,7 @@ import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -17,10 +18,11 @@ import java.util.List;
 @Component
 public class SolrJClient {
 
-    private static final String SOLR_URL = "http://localhost:8983/solr/restaurants";
+    @Value("${solr.url}")
+    private String solrUrl;
 
     public List<RestaurantResponse> createSolrQuery(Double latitude, Double longitude) {
-        try (HttpSolrClient solrClient = new HttpSolrClient.Builder(SOLR_URL).build()) {
+        try (HttpSolrClient solrClient = new HttpSolrClient.Builder(solrUrl).build()) {
 
             SolrQuery solrQuery = new SolrQuery();
             solrQuery.set("fq", "{!geofilt pt="+latitude+","+longitude+" sfield=location d=10}");
