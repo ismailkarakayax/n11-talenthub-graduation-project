@@ -1,5 +1,5 @@
 FROM openjdk:21
-RUN mvn clean package -DskipTests
+RUN ./mvnw clean package -DskipTests
 
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} app.jar
