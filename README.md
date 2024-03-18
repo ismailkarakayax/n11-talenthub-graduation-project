@@ -23,6 +23,7 @@ Bu proje, N11 Bootcamp mezuniyet projesinin backend kısmını içerir. Projemiz
 Projenin çalışması için aşağıdaki gereksinimlere ihtiyacınız olacaktır:
 
 - Docker
+- Maven
 
 ## Microservice Yapısı
 
