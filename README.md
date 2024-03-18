@@ -25,7 +25,11 @@ Projenin çalışması için aşağıdaki gereksinimlere ihtiyacınız olacaktı
 - Docker
 - Maven
 
-## Microservice Yapısı
+## Bitirme Projesi İsterleri
+
+![Proje Mikroservis Yapısı](proje.jpg)
+
+## Projemin Microservice Yapısı
 
 ![Proje Mikroservis Yapısı](diagram.png)
 
