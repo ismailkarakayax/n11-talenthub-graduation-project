@@ -16,7 +16,7 @@ Bu proje, N11 Bootcamp mezuniyet projesinin backend kısmını içerir. Projemiz
     docker-compose up
     ```
 
-3. Projenin Docker üzerinden başlatılmasının ardından aşağıdaki bağlantılarla projeyi kullanabilirsiniz.
+3. Projenin Docker üzerinden başlatılmasının ardından aşağıdaki bağlantılar başlığının altındaki linklerden projeyi kullanabilirsiniz.
 
 ## Gereksinimler
 
